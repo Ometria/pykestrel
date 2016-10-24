@@ -237,10 +237,10 @@ class Client(threading.local):
 
         for server, stats in self.raw_stats():
             server = server.split(' ', 1)[0]
-            for name, stat in stats.iteritems():
+            for name, stat in stats.items():
                 if not name.startswith('queue_'):
                     try:
-                        _sstats[name] = long(stat)
+                        _sstats[name] = int(stat)
                     except ValueError:
                         _sstats[name] = stat
 
@@ -250,7 +250,7 @@ class Client(threading.local):
                 if stat.count('='):
                     (key, value) = stat.split('=')
                     try:
-                        _stats[key] = long(value)
+                        _stats[key] = int(value)
                     except ValueError:
                         _stats[key] = value
             _qstats[name] = _stats
@@ -366,7 +366,7 @@ class KestrelMemcacheClient(memcache.Client):
         else:
             serverhash = random.randint(0, len(self.buckets))
 
-        for i in xrange(memcache.Client._SERVER_RETRIES):
+        for i in range(memcache.Client._SERVER_RETRIES):
             server = self.buckets[serverhash % len(self.buckets)]
             if server.connect():
                 return server, key
